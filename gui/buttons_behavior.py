@@ -136,11 +136,14 @@ class ListOfEdgesButton(ButtonBehavior):
             globals.input_drop_down_list.ids.adjacencyList_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.adjacencyMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.costMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.degreeSequence_btn.background_color = (0.34, 0.34, 0.34, 1)
 
             globals.edge_list_input_btn = True
             globals.adjacency_list_input_btn = False
             globals.adjacency_matrix_input_btn = False
             globals.cost_matrix_input_btn = False
+            globals.degreeSequence_btn = False
+
             globals.main_view_widget.ids.input_text.hint_text = "node1  node2\nnode3  node4"
 
 
@@ -156,11 +159,14 @@ class AdjacencyListButton(ButtonBehavior):
             globals.input_drop_down_list.ids.listOfEdges_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.adjacencyMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.costMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.degreeSequence_btn.background_color = (0.34, 0.34, 0.34, 1)
 
             globals.edge_list_input_btn = False
             globals.adjacency_list_input_btn = True
             globals.adjacency_matrix_input_btn = False
             globals.cost_matrix_input_btn = False
+            globals.degreeSequence_btn = False
+
             globals.main_view_widget.ids.input_text.hint_text = "node: neighbor1,..."
 
         else:   # if it is pressed
@@ -183,11 +189,14 @@ class AdjacencyMatrixButton(ButtonBehavior):
             globals.input_drop_down_list.ids.listOfEdges_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.adjacencyList_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.costMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.degreeSequence_btn.background_color = (0.34, 0.34, 0.34, 1)
 
             globals.edge_list_input_btn = False
             globals.adjacency_list_input_btn = False
             globals.adjacency_matrix_input_btn = True
             globals.cost_matrix_input_btn = False
+            globals.degreeSequence_btn = False
+
             globals.main_view_widget.ids.input_text.hint_text = "0 1 1 0\n" \
                                                                "1 0 0 1\n" \
                                                                "0 1 0 1\n" \
@@ -213,11 +222,13 @@ class CostMatrixButton(ButtonBehavior):
             globals.input_drop_down_list.ids.listOfEdges_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.adjacencyList_btn.background_color = (0.34, 0.34, 0.34, 1)
             globals.input_drop_down_list.ids.adjacencyMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.degreeSequence_btn.background_color = (0.34, 0.34, 0.34, 1)
 
             globals.edge_list_input_btn = False
             globals.adjacency_list_input_btn = False
             globals.adjacency_matrix_input_btn = False
             globals.cost_matrix_input_btn = True
+            globals.degreeSequence_btn = False
 
             globals.main_view_widget.ids.input_text.hint_text = "0 123 78 62\n" \
                                                                "13 0 6 198\n" \
@@ -231,6 +242,33 @@ class CostMatrixButton(ButtonBehavior):
             # The buttons can't be unpressed at the same time
             globals.input_drop_down_list.ids.listOfEdges_btn.background_color = (0.8, 0.8, 0.8, 1)
 
+class DegreeSequenceButton(ButtonBehavior):
+
+    def on_press(self):
+        if globals.input_drop_down_list.ids.degreeSequence_btn.background_color != [0.8, 0.8, 0.8, 1]: # if is not pressed
+            globals.input_drop_down_list.ids.degreeSequence_btn.background_normal: ''
+            globals.input_drop_down_list.ids.degreeSequence_btn.background_color = (0.8, 0.8, 0.8, 1)
+
+
+            # The buttons from the dropdown list can't be pressed at the same time
+            globals.input_drop_down_list.ids.listOfEdges_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.adjacencyList_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.adjacencyMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
+            globals.input_drop_down_list.ids.costMatrix_btn.background_color = (0.34, 0.34, 0.34, 1)
+
+            globals.edge_list_input_btn = False
+            globals.adjacency_list_input_btn = False
+            globals.adjacency_matrix_input_btn = False
+            globals.cost_matrix_input_btn = False
+            globals.degreeSequence_input_btn = True
+            globals.main_view_widget.ids.input_text.hint_text = "(degree, degree, ...)"
+
+        else:   # if it is pressed
+            globals.input_drop_down_list.ids.adjacencyList_btn.background_normal: ''
+            globals.input_drop_down_list.ids.adjacencyList_btn.background_color = (0.34, 0.34, 0.34, 1)
+
+            # The buttons can't be unpressed at the same time
+            globals.input_drop_down_list.ids.listOfEdges_btn.background_color = (0.8, 0.8, 0.8, 1)
 
 class UndirectedButton(ButtonBehavior):
 

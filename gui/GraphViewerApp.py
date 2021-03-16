@@ -244,6 +244,7 @@ class GraphViewerApp(App):
         globals.input_drop_down_list.ids.adjacencyList_btn.bind(on_press=AdjacencyListButton.on_press)
         globals.input_drop_down_list.ids.adjacencyMatrix_btn.bind(on_press=AdjacencyMatrixButton.on_press)
         globals.input_drop_down_list.ids.costMatrix_btn.bind(on_press=CostMatrixButton.on_press)
+        globals.input_drop_down_list.ids.degreeSequence_btn.bind(on_press=DegreeSequenceButton.on_press)
 
         globals.main_view_widget.ids.undirected_btn.bind(on_press=UndirectedButton.on_press)
         globals.main_view_widget.ids.directed_btn.bind(on_press=DirectedButton.on_press)

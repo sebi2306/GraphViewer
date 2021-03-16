@@ -432,7 +432,6 @@ class GraphManager:
         return [node_id, list]
 
 
-
     def interpretLineCostMatrix(self, text): # this function will return a list with the numbers of that line
         index = 0
         list = []
@@ -450,6 +449,87 @@ class GraphManager:
                 index += 1
 
         return list
+
+
+    def interpretDegreeSequence(self, text):
+        index = 0
+        degSeq = []
+        
+        text = text.strip()
+        text = text.replace('(', '').replace(')', '')
+        
+        while index < len(text):
+            if text[index].isdigit():
+                degSeq.append(text[index])
+                index += 1
+            elif text[index] == ',' or text[index] == ' ':
+                index += 1
+            else:
+                return -1
+                
+        return [int(i) for i in degSeq]
+
+    def graphExists(self, a):
+        while a:
+            a = sorted(a, reverse=True)
+
+            if a[0] == 0 and a[len(a) - 1] == 0:
+                return True
+
+            v = a[0]
+            a = a[1:]
+
+            if v > len(a):
+                return False
+
+            for i in range(v):
+                a[i] -= 1
+
+                if a[i] < 0:
+                    return False
+
+    def genMatrix(self, w, h):
+        mat = [[0 for x in range(w)] for y in range(h)]
+        return mat
+
+    def getAdjacencyMatrixForDegSeq(self, degSeq):
+        degSeqSize = len(degSeq)
+        adjMat = self.genMatrix(degSeqSize, degSeqSize)
+        cpyDegSeq = sorted(degSeq, reverse=True)
+        pos = 0
+        while cpyDegSeq:
+            degSeq = sorted(degSeq, reverse=True)
+            if not degSeq:
+                break
+
+            degSeq = degSeq[1:]
+
+            while cpyDegSeq[pos] > 0:
+                for i in range(pos + 1, degSeqSize):
+                    # degSeq[pos-1]-=1
+                    if cpyDegSeq[i] == 0:
+                        continue
+                    cpyDegSeq[pos] -= 1
+                    cpyDegSeq[i] -= 1
+                    adjMat[pos][i] = 1
+                    adjMat[i][pos] = 1
+                    if cpyDegSeq[pos] == 0:
+                        break
+            pos += 1
+
+        return adjMat
+
+    def adjMatToDrawableMat(self, adjMat):
+        adjMatSize = len(adjMat)
+        drawableMat = []*adjMatSize
+        for i in range(adjMatSize):
+            adjList = []
+            for j in range(adjMatSize):
+                if adjMat[i][j] and i != j:
+                    adjList.append(j+1)
+            drawableMat.append(adjList)
+
+        return drawableMat
 
     def deleteOldNodes(self, last_node_widgets_list):
         globals.graph_manager.node_widgets.sort(key=lambda node: node.Id)
@@ -597,6 +677,7 @@ class GraphManager:
                                                     self.data_graph_is_valid = True
                                                     globals.main_view_widget.ids.input_text.foreground_color = [0, 0, 0,
                                                                                                                 1]
+                                                    print(matrix)
                                                     self.interpretAdjacencyMatrix(number_of_cols, matrix, last_node_widgets_list)
                                                 else:
                                                     globals.main_view_widget.ids.input_text.foreground_color = [1, 0, 0,
@@ -605,14 +686,23 @@ class GraphManager:
 
                                         else: # then it is an empty line
                                             line_index -= 1
-
-
-
-
-
-
-                        else: # when globals.costMatrixBtn == True
+                        
+                        elif globals.cost_matrix_input_btn == True:
                             self.interpretCostMatrix()
+                            
+                        else: #globals.degree_sequence_input_btn == True
+                            val = self.interpretDegreeSequence(line)
+                            print(line+":"+str(val))
+                            if val == -1:
+                                globals.main_view_widget.ids.input_text.foreground_color = [1, 0, 0, 1]
+                                self.data_graph_is_valid = False
+                                break
+                            self.data_graph_is_valid = True
+                            globals.main_view_widget.ids.input_text.foreground_color = [0, 0, 0, 1]
+                            if self.graphExists(val):
+                                adjMat = self.getAdjacencyMatrixForDegSeq(val)
+                                self.interpretAdjacencyMatrix(len(adjMat),self.adjMatToDrawableMat(adjMat),last_node_widgets_list)
+
 
         self.update_canvas()
         self.printGraph()

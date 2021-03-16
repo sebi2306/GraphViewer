@@ -27,6 +27,8 @@ edge_list_input_btn = True
 adjacency_list_input_btn = False
 adjacency_matrix_input_btn = False
 cost_matrix_input_btn = False
+degreeSequence_input_btn = False
+
 
 selected_algorithm = None
 
