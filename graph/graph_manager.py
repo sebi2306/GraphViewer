@@ -496,6 +496,7 @@ class GraphManager:
         degSeqSize = len(degSeq)
         adjMat = self.genMatrix(degSeqSize, degSeqSize)
         cpyDegSeq = sorted(degSeq, reverse=True)
+        sumDegSeq = sum(cpyDegSeq)
         pos = 0
         while cpyDegSeq:
             degSeq = sorted(degSeq, reverse=True)
@@ -513,11 +514,27 @@ class GraphManager:
                     cpyDegSeq[i] -= 1
                     adjMat[pos][i] = 1
                     adjMat[i][pos] = 1
+                    if not self.isValidAdjMatForDegSeq(adjMat, cpyDegSeq, sumDegSeq):
+                        adjMat[pos][i] = 0
+                        adjMat[i][pos] = 0
+                        cpyDegSeq[i] += 1
+                        cpyDegSeq[pos] += 1
+                        continue
+                    elif i == 6:
+                        print("OK")
                     if cpyDegSeq[pos] == 0:
                         break
             pos += 1
 
         return adjMat
+
+    def isValidAdjMatForDegSeq(self, adjMat, degSeq, sumDegSeq):
+        length = len(degSeq)
+        print(sum([sum(x) for x in adjMat[:-1]]))
+        print(degSeq[length - 1])
+        if sumDegSeq - sum([sum(x) for x in adjMat[:-1]]) == degSeq[length - 1]:
+            return False
+        return True
 
     def adjMatToDrawableMat(self, adjMat):
         adjMatSize = len(adjMat)
@@ -677,7 +694,6 @@ class GraphManager:
                                                     self.data_graph_is_valid = True
                                                     globals.main_view_widget.ids.input_text.foreground_color = [0, 0, 0,
                                                                                                                 1]
-                                                    print(matrix)
                                                     self.interpretAdjacencyMatrix(number_of_cols, matrix, last_node_widgets_list)
                                                 else:
                                                     globals.main_view_widget.ids.input_text.foreground_color = [1, 0, 0,
@@ -692,7 +708,7 @@ class GraphManager:
                             
                         else: #globals.degree_sequence_input_btn == True
                             val = self.interpretDegreeSequence(line)
-                            print(line+":"+str(val))
+                            print(val)
                             if val == -1:
                                 globals.main_view_widget.ids.input_text.foreground_color = [1, 0, 0, 1]
                                 self.data_graph_is_valid = False
@@ -702,10 +718,13 @@ class GraphManager:
                             if self.graphExists(val):
                                 adjMat = self.getAdjacencyMatrixForDegSeq(val)
                                 self.interpretAdjacencyMatrix(len(adjMat),self.adjMatToDrawableMat(adjMat),last_node_widgets_list)
+                            else:
+                                globals.main_view_widget.ids.graph_canvas.clear_widgets()
+
 
 
         self.update_canvas()
-        self.printGraph()
+        #self.printGraph()
 
 
     def printGraph(self):
