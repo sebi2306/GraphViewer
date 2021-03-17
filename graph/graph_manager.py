@@ -492,7 +492,7 @@ class GraphManager:
         mat = [[0 for x in range(w)] for y in range(h)]
         return mat
 
-    def getAdjacencyMatrixForDegSeq(self, degSeq):
+    def getAdjacencyMatrixForDegSeq(self,degSeq):
         degSeqSize = len(degSeq)
         adjMat = self.genMatrix(degSeqSize, degSeqSize)
         cpyDegSeq = sorted(degSeq, reverse=True)
@@ -514,7 +514,7 @@ class GraphManager:
                     cpyDegSeq[i] -= 1
                     adjMat[pos][i] = 1
                     adjMat[i][pos] = 1
-                    if not self.isValidAdjMatForDegSeq(adjMat, cpyDegSeq, sumDegSeq):
+                    if not self.graphExists(cpyDegSeq):  # isValidAdjMatForDegSeq(adjMat, cpyDegSeq, sumDegSeq, pos, i):
                         adjMat[pos][i] = 0
                         adjMat[i][pos] = 0
                         cpyDegSeq[i] += 1
@@ -527,14 +527,6 @@ class GraphManager:
             pos += 1
 
         return adjMat
-
-    def isValidAdjMatForDegSeq(self, adjMat, degSeq, sumDegSeq):
-        length = len(degSeq)
-        print(sum([sum(x) for x in adjMat[:-1]]))
-        print(degSeq[length - 1])
-        if sumDegSeq - sum([sum(x) for x in adjMat[:-1]]) == degSeq[length - 1]:
-            return False
-        return True
 
     def adjMatToDrawableMat(self, adjMat):
         adjMatSize = len(adjMat)
